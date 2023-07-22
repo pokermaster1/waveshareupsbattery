@@ -7,6 +7,8 @@ UPS HAT FROM WAVESHARE:
 https://www.waveshare.com/ups-hat-c.htm
 https://www.waveshare.com/wiki/UPS_HAT_(C)
 
+(don't forget to turn on I2C on your raspberry pi)
+
 USED IMAGE: 
 https://github.com/wpa-2/pwnagotchi/releases
 
@@ -22,6 +24,8 @@ www.pwnagotchi.ai/plugins/ provides instructions on how to install plugins.
 You can also save the python file in /usr/local/share/pwnagotchi/installed-plugins/ 
 and add the following line to config.toml in /etc/pwnagotchi/: "main.plugins.wavesharebattery.enabled = true". 
 The battery typically lasts around 2.5-3 hours and charges quickly.
+
+
 
 
 
