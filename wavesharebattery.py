@@ -2,7 +2,6 @@ import pwnagotchi
 import pwnagotchi.plugins as plugins
 import pwnagotchi.ui.fonts as fonts
 from pwnagotchi.ui.components import LabeledValue
-from pwnagotchi.ui.view import BLACK
 import logging
 import struct
 import datetime
