@@ -177,7 +177,7 @@ class WaveshareBattery(plugins.Plugin):
             return
             
         
-        bus_voltage = self.ina219.getBusVoltage_V()
+        bus_voltage = self.bat.getBusVoltage_V()
         p = (bus_voltage - 3)/1.2*100
         if(p > 100):p = 100
         if(p < 0):p = 0
