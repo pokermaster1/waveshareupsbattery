@@ -142,27 +142,42 @@ class WaveshareBattery(plugins.Plugin):
     __license__ = 'GPL3'
     __description__ = 'battery in percentage (Waveshare UPS HAT (C) for RP Zero)'
 
+    
+    def __init__(self):
+        self.loaded = False
+        self.bat = None
+        self.addr = 0x43
+        self._black = 0x00
     def on_loaded(self):
+        #load plugin stuff
+
+        if 'invert' in pwnagotchi.config['ui'] and pwnagotchi.config['ui']['invert'] == 1 or BLACK == 0xFF:
+                    self._black = 0xFF
+        
+        #if toml allows it
+        if 'address' in self.options:
+            self.addr = self.options['address']
+        
+        self.loaded = True
+        self.bat = INA219(addr=self.addr)
         logging.info("Battery Plugin loaded.")
 
+    
     def on_ui_setup(self, ui):
-        battery = False
+        if self.loaded is False:
+            return
+        logging.debug("Battery Plugin UI Setup starting.")
 
-        with open('/etc/pwnagotchi/config.toml', 'r') as f:
-            config = f.read().splitlines()
-
-        if "main.plugins.wavesharebattery.enabled = true" in config:
-            battery = True
-            logging.info(
-                "Pwnagotchi Battery Plugin: battery plugin is enabled")
-
-            ui.add_element('ups', LabeledValue(color=BLACK, label='UPS', value='-', position=(ui.width() / 2 + 15, 0),
+        ui.add_element('ups', LabeledValue(color=self._black, label='UPS', value='-', position=(ui.width() / 2 + 15, 0),
                                            label_font=fonts.Bold, text_font=fonts.Medium))
-
+        logging.debug("Battery Plugin UI Setup finished OK.")
+    
     def on_ui_update(self, ui):
-
-        ina219 = INA219(addr=0x43)
-        bus_voltage = ina219.getBusVoltage_V()
+        if self.loaded is False:
+            return
+            
+        
+        bus_voltage = self.bat.getBusVoltage_V()
         p = (bus_voltage - 3)/1.2*100
         if(p > 100):p = 100
         if(p < 0):p = 0
