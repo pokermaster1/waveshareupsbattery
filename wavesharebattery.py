@@ -167,7 +167,7 @@ class WaveshareBattery(plugins.Plugin):
             return
         logging.debug("Battery Plugin UI Setup starting.")
 
-        ui.add_element('ups', LabeledValue(color=self.color, label='UPS', value='-', position=(ui.width() / 2 + 15, 0),
+        ui.add_element('ups', LabeledValue(color=self._black, label='UPS', value='-', position=(ui.width() / 2 + 15, 0),
                                            label_font=fonts.Bold, text_font=fonts.Medium))
         logging.debug("Battery Plugin UI Setup finished OK.")
     
