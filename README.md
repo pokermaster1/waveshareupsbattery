@@ -35,7 +35,23 @@ To install this plugin type:
 and restart the pwnagotchi. After that you should see the plugin on the webinterface. Enable it and enjoy! :)
 
 
+## Pictures
 
+### Battery LOW
 
+<div align="center">
+    <img src="Off.jpg" alt="Battery LOW" width="500">
+</div>
 
+### Charging
+
+<div align="center">
+    <img src="charge.jpg" alt="Charging" width="500">
+</div>
+
+### Normal Usage
+
+<div align="center">
+    <img src="normal.jpg" alt="Normal Usage" width="500">
+</div>
 
