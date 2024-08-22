@@ -1,6 +1,7 @@
 import pwnagotchi
 import pwnagotchi.plugins as plugins
 import pwnagotchi.ui.fonts as fonts
+import pwnagotchi.ui.faces as faces
 from pwnagotchi.ui.components import LabeledValue
 from pwnagotchi.ui.view import BLACK
 import logging
@@ -134,38 +135,71 @@ class INA219:
             value -= 65535
         return value * self._power_lsb
 
-
-
 class WaveshareBattery(plugins.Plugin):
-    __author__ = 'https://github.com/leopascal1'
-    __version__ = '1.0.0'
+
+    __author__ = 'https://github.com/pokermaster1'
+    __version__ = '2.0.0'
     __license__ = 'GPL3'
-    __description__ = 'battery in percentage (Waveshare UPS HAT (C) for RP Zero)'
+    __description__ = 'Battery in percentage (Waveshare UPS HAT (C) for RP Zero 2W)'
+
+    ina219 = INA219(addr=0x43)
+    refresh_counter = 0
 
     def on_loaded(self):
-        logging.info("Battery Plugin loaded.")
+        logging.info("Waveshare UPS-Battery Plugin loaded.")
 
     def on_ui_setup(self, ui):
-        battery = False
 
-        with open('/etc/pwnagotchi/config.toml', 'r') as f:
-            config = f.read().splitlines()
+        logging.info("Pwnagotchi Battery Plugin: battery plugin is enabled")
+        ui.add_element('ups', LabeledValue(
+            color=BLACK, 
+            label='UPS', 
+            value='-', 
+            position=(ui.width() / 2 + 15, 0), 
+            label_font=fonts.Bold, 
+            text_font=fonts.Medium
+        ))
 
-        if "main.plugins.wavesharebattery.enabled = true" in config:
-            battery = True
-            logging.info(
-                "Pwnagotchi Battery Plugin: battery plugin is enabled")
+    def get_percentage(self):
+        try:
+            bus_voltage = self.ina219.getBusVoltage_V()
+            current_mA = self.ina219.getCurrent_mA()
+            shunt_voltage = self.ina219.getShuntVoltage_mV()
 
-            ui.add_element('ups', LabeledValue(color=BLACK, label='UPS', value='-', position=(ui.width() / 2 + 15, 0),
-                                           label_font=fonts.Bold, text_font=fonts.Medium))
+            estimated_capacity = (bus_voltage - 3.0) * 100 / 1.2
+            percentage = max(0, min(100, estimated_capacity))
+            return int(percentage)
+
+        except Exception as e:
+            logging.error(f"Error in get_percentage: {str(e)}")
+            return 0
+
 
     def on_ui_update(self, ui):
+        battery_percentage = self.get_percentage()
+        self.refresh_counter+= 1
 
-        ina219 = INA219(addr=0x43)
-        bus_voltage = ina219.getBusVoltage_V()
-        p = (bus_voltage - 3)/1.2*100
-        if(p > 100):p = 100
-        if(p < 0):p = 0
-        ui.set('ups', "{:02d}%".format(int(p)))
+        if self.refresh_counter % 5 == 0:
+            ui.set('ups', f"{battery_percentage:02d}%")
 
+            if self.refresh_counter == 100:
+                self.refresh_counter = 0
+        
+        if battery_percentage <= 10:
+            ui.set('ups', "LOW")
+            ui.update(force=True, new_data={'status': 'Battery low... Please charge!'})
+            ui.set('face', faces.SAD)
+        
+        if battery_percentage > 91:
+            ui.set('ups', "CHG")
+            ui.update(force=True, new_data={'status': 'Battery charging! '})
+            ui.set('face', faces.HAPPY) 
+        
+
+    def on_unload(self, ui):
+        try:
+            with ui._lock:
+                ui.remove_element('ups')
+        except Exception as err:
+            logging.error(f"Error in on_unload: {str(e)}")
 
