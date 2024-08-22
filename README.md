@@ -16,15 +16,13 @@ This is a plugin designed for displaying the battery percentage when using the W
 
 First, ensure that I2C is enabled on your Raspberry Pi. You can enable it using `raspi-config`:
 
-```bash
-sudo raspi-config
+`sudo raspi-config`
 
 ### Step 2: Enable I2C on your Raspberry Pi
 
 Copy the wavesharebattery.py into /usr/local/share/pwnagotchi/available-plugins and check with
 
-```bash
-sudo pwnagotchi plugins list
+`sudo pwnagotchi plugins list`
 
 if the plugin gets detected.
 
@@ -32,8 +30,7 @@ if the plugin gets detected.
 
 To install this plugin type:
 
-```bash
-sudo pwnagotchi plugins install wavesharebattery
+`sudo pwnagotchi plugins install wavesharebattery`
 
 and restart the pwnagotchi. After that you should see the plugin on the webinterface. Enable it and enjoy! :)
 
