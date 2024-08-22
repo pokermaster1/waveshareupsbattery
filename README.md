@@ -1,30 +1,41 @@
-# waveshareupsbattery
-Waveshare UPS Hat (C) for Raspberry PI Zero Plugin
+# Waveshare UPS Battery Plugin for Raspberry Pi Zero (2) W
 
-A plugin for a battery display in percentage
+This is a plugin designed for displaying the battery percentage when using the Waveshare UPS HAT (C) on a Raspberry Pi Zero (2) W.
 
-UPS HAT FROM WAVESHARE:
-https://www.waveshare.com/ups-hat-c.htm
-https://www.waveshare.com/wiki/UPS_HAT_(C)
+## Requirements
 
-(don't forget to turn on I2C on your raspberry pi)
+- **Raspberry Pi Zero (2) W**
+- **Waveshare UPS HAT (C)**: [Product Page](https://www.waveshare.com/ups-hat-c.htm) | [Wiki](https://www.waveshare.com/wiki/UPS_HAT_(C))
+- **Pwnagotchi Image**: You can use this [Pwnagotchi image](https://github.com/jayofelony/pwnagotchi/releases).
 
-USED IMAGE: 
-https://github.com/wpa-2/pwnagotchi/releases
+**Important**: Make sure to enable I2C on your Raspberry Pi before proceeding with the installation.
 
+## Installation
 
-If you are using the Waveshare UPS HAT for the Raspberry Pi Zero, 
-this plugin allows you to display the battery percentage on your pwnagotchi.
+### Step 1: Enable I2C on your Raspberry Pi
 
-The plugin has been tested on a Pwnagotchi with the 1.5.5FIX image and the Waveshare Display V2. 
-Although it has not been tested on displays of other generations, the code can potentially be adapted if needed. 
+First, ensure that I2C is enabled on your Raspberry Pi. You can enable it using `raspi-config`:
 
+```bash
+sudo raspi-config
 
-www.pwnagotchi.ai/plugins/ provides instructions on how to install plugins. 
-You can also save the python file in /usr/local/share/pwnagotchi/installed-plugins/ 
-and add the following line to config.toml in /etc/pwnagotchi/: "main.plugins.wavesharebattery.enabled = true". 
-The battery typically lasts around 2.5-3 hours and charges quickly.
+### Step 2: Enable I2C on your Raspberry Pi
 
+Copy the wavesharebattery.py into /usr/local/share/pwnagotchi/available-plugins and check with
+
+```bash
+sudo pwnagotchi plugins list
+
+if the plugin gets detected.
+
+### Step 3: Install the plugin
+
+To install this plugin type:
+
+```bash
+sudo pwnagotchi plugins install wavesharebattery
+
+and restart the pwnagotchi. After that you should see the plugin on the webinterface. Enable it and enjoy! :)
 
 
 
